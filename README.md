@@ -1,1 +1,2 @@
-# logic_circuit_project
+# logic circuit project
+## VHDL
