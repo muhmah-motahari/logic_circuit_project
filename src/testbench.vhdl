@@ -12,7 +12,7 @@ architecture struct_testbench of testbench is
 	signal input, sc, so, sb, EOpening, EClosing : std_logic;
 begin
 	uut: main port map(input, sc, so, sb, EOpening, EClosing);
-    input <= '0', '1' after 0.8 ns, '0' after 3 ns;
-    sc <= '1', '0' after 0.89 ns;
-    so <= '0', '1' after 7 ns;
+    input <= '0', '1' after 0.8 ns, '0' after 3 ns, '1' after 9 ns, '0' after 11 ns;
+    sc <= '1', '0' after 0.89 ns, '1' after 17 ns;
+    so <= '0', '1' after 7 ns, '0' after 9.09 ns;
 end architecture;

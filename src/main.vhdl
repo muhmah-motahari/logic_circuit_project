@@ -11,10 +11,13 @@ architecture struct_main of main is
 		port(d, clk : in std_logic;
 			q : out std_logic);
 	end component;
-	signal notSO : std_logic;
-    signal s1 : std_logic;
+	signal notSO, notSC : std_logic;
+    signal s1, s2 : std_logic;
 begin
 	notSO <= not so;
+    notSC <= not sc;
 	flp0: flipflop port map(clk => input, d => sc, q => s1);
+    flp1: flipflop port map(clk => input, d => so, q => s2);
     EOpening <= notSO and s1;
+    EClosing <= notSC and s2;
 end architecture;
