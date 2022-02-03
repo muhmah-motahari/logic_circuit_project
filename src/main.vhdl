@@ -22,21 +22,9 @@ architecture struct_main of main is
     signal zero, timeout : std_logic := '0';
     signal Out2, Out1, Ready : std_logic := '0' ;
     signal bool : boolean := false;
+    signal clock : std_logic := '0';
 begin
-    followtest : process
-    begin
-        if so'event and so = '1' then
-            bool <= true;
-        end if;
-        wait for 20 ns;
-        if(bool = true) then
-            if(sec = '0') then
-                timeout <= '1';
-            end if;
-        end if;
-
-        wait;
-    end process;
+    clock <= (not clock) after 10 ns;
 
 
 	notSO <= not so;
@@ -52,4 +40,6 @@ begin
     sec <= notSC and s4;
     EOpening <= seo;
     EClosing <= sec;
+
+
 end architecture;
