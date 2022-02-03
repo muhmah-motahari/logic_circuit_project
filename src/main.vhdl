@@ -15,6 +15,14 @@ architecture struct_main of main is
         port(w0, w1, s : in std_logic;
             output : out std_logic);
     end component;
+    component up_counter is
+         port (
+             cout   :out integer := 0; -- Output of the counter
+             enable :in  std_logic;                     -- Enable counting
+             clk    :in  std_logic;                     -- Input clock
+             reset  :in  std_logic                      -- Input reset
+         );
+    end component;
 
 	signal notSO, notSC : std_logic;
     signal s1, s2, s3, s4, s5, s6, s7, seo, sec : std_logic;
@@ -22,10 +30,17 @@ architecture struct_main of main is
     signal zero, timeout : std_logic := '0';
     signal Out2, Out1, Ready : std_logic := '0' ;
     signal bool : boolean := false;
-    signal clock : std_logic := '0';
-begin
-    clock <= (not clock) after 10 ns;
 
+    signal clock : std_logic := '0';
+    signal coutCounter : integer := 0;
+    signal resetCounter : std_logic := '0';
+begin
+
+    clock <= not clock after 5 ns;
+
+    counter1: up_counter port map(coutCounter, so, clock, resetCounter);
+    timeout <= '1' when (coutCounter >= 4) else '0';
+    resetCounter <= '1', '0' after 2 ns when (coutCounter >= 4) else '0';
 
 	notSO <= not so;
     notSC <= not sc;
