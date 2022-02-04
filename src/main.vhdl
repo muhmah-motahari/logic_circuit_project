@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity main is
-	port(input, sc, so, sb : in std_logic;
+	port(input, sc, so, sb, TOEnable : in std_logic := '0';
 	    	EOpening, EClosing: out std_logic := '0');
 end entity;
 
@@ -23,6 +23,10 @@ architecture struct_main of main is
              reset  :in  std_logic                      -- Input reset
          );
     end component;
+    component toenable_logic is
+        port(input, clk : in std_logic;
+            output : out std_logic := '1');
+    end component;
 
 	signal notSO, notSC : std_logic;
     signal s1, s2, s3, s4, s5, s6, s7, seo, sec : std_logic;
@@ -34,6 +38,8 @@ architecture struct_main of main is
     signal clock : std_logic := '0';
     signal coutCounter : integer := 0;
     signal resetCounter : std_logic := '0';
+
+    signal outputTOEnable : std_logic := '1';
 begin
 
     clock <= not clock after 5 ns;
@@ -42,9 +48,11 @@ begin
     timeout <= '1' when (coutCounter >= 4) else '0';
     resetCounter <= '1', '0' after 2 ns when (coutCounter >= 4) else '0';
 
+    TOE: toenable_logic port map(TOEnable, clock, outputTOEnable);
+
 	notSO <= not so;
     notSC <= not sc;
-    s7 <= input or timeout;
+    s7 <= input or (timeout and outputTOEnable);
 	flp0: flipflop port map(clk => input, d => sc, q => s1);
     flp1: flipflop port map(clk => s7, d => so, q => s2);
     flp2: flipflop port map(clk => sb, d => notSO, q => s5);
